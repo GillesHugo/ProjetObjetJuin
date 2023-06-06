@@ -26,6 +26,10 @@ import java.util.concurrent.*;
         }
     }
 
+    public boolean IsDrawn(){
+        return state == stateUp;
+    }
+
     public char getFront(){
         return frontSide;
     }
@@ -49,8 +53,10 @@ import java.util.concurrent.*;
         else if(state == stateOut){
             System.out.println("Card is out");
         }
+    }
 
-
+    public void DrawCard(){
+        state = stateUp;
     }
 
     public void Update(Card otherCard){
@@ -58,15 +64,11 @@ import java.util.concurrent.*;
             if(otherCard!=null){
                 if(otherCard.getFront() == this.frontSide){
                     RemoveCard();
-                    otherCard.RemoveCard();
                 }
                 else{
                     HideCard();
-                    otherCard.HideCard();
                 }
             }
         }
     }
-
-
  }

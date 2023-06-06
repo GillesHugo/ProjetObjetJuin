@@ -1,5 +1,7 @@
 import java.util.Scanner;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class Terminal {
@@ -8,14 +10,19 @@ public class Terminal {
     private char c;
 
     private Card[][] game;
-    private Card cardSelected = null;
-    private Card sndCardSelected = null;
+
+    private Player[] players;
+    private int rPP; //Rank Player Playing
 
 
     public Terminal(){
         sc = new Scanner(System.in);
         game = new Card[5][5];
-        
+        players = new Player[2];
+        players[0] = new Player("Manon", 1);
+        players[1] = new Player("Hugo", 2);
+        rPP = 0;
+
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++){
                 if(j%3 == 0){
@@ -29,13 +36,10 @@ public class Terminal {
                 }
             }
         }
-
-        //etat.Dialoguer();
     }
 
-    private void Dialoguer(){
 
-        
+    private void DisplayGame(){
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++){
                 game[i][j].ShowCard();
@@ -43,40 +47,63 @@ public class Terminal {
             }
             System.out.print("\n");
         }
+    }
+
+    private void Dialoguer(){
+
+        
+        DisplayGame();
 
 
-        if(cardSelected != null && sndCardSelected != null){
-            System.out.println("************************");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            cardSelected.Update(sndCardSelected);
-            sndCardSelected.Update(cardSelected);
-            for(int i = 0; i < 5; i++){
-                for(int j = 0; j < 5; j++){
-                    game[i][j].ShowCard();
-                    System.out.print(" ");
+        int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying();
+
+        if(players[rPP-1].GetState() instanceof StatePlayerTwoCardsDrown){
+            Card[] cardsDrown = players[rPP-1].GetCards();
+            if(cardsDrown[0].getFront() == cardsDrown[1].getFront()){
+                players[rPP-1].Gain(2);
+                players[rPP-1].PickCard(null);
+
+                for(int i = 0; i < 5; i++){
+                    for(int j = 0; j < 5; j++){
+                        if(game[i][j].IsDrawn()){
+                            game[i][j].RemoveCard();
+                        }
+                    }
                 }
-                System.out.print("\n");
             }
-            cardSelected = null;
-            sndCardSelected = null;
+            else{
+                players[0].SwitchRole();
+                players[1].SwitchRole();
+
+                for(int i = 0; i < 5; i++){
+                    for(int j = 0; j < 5; j++){
+                        if(game[i][j].IsDrawn()){
+                            game[i][j].HideCard();
+                        }
+                    }
+                }
+                rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying();
+            }
+
+            
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            DisplayGame();
         }
 
-        System.out.println("Sélectionnez une ligne, appuyez sur # pour quitter.");
+        System.out.println("C'est à " + players[rPP-1].GetName() + " de jouer, " + " score = " + players[rPP-1].GetScore() + ",   Sélectionnez une ligne, appuyez sur # pour quitter.");
         int row = StringToInt(sc.nextLine());
         System.out.println("Sélectionnez une ligne, appuyez sur # pour quitter.");
         int col = StringToInt(sc.nextLine());
 
-        game[col][row].PlayerSelect(cardSelected);
-        if(cardSelected == null){
-            cardSelected = game[col][row];
-        }
-        else{
-            sndCardSelected = game[col][row];
-        }
+        game[row][col].DrawCard();
+        players[rPP-1].PickCard(game[row][col]);
+
+
     }
 
     private int StringToInt(String str){
