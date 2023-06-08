@@ -1,7 +1,11 @@
 public class Main {
     public static void main(String[] args) {
-        Fenetre f = new Fenetre();
+        FenetreParametres f = new FenetreParametres();
 
-        f.setVisible(true);
+        f.setVisible(false);
+
+        FenetreJeu f2 = new FenetreJeu();
+
+        f2.setVisible(true);
     }
 }

@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Fenetre extends JFrame implements ActionListener {
+public class FenetreParametres extends JFrame implements ActionListener {
     private JPanel panelParametrage;
     private JPanel panelJeu;
     private JLabel labelJ1;
@@ -17,13 +17,13 @@ public class Fenetre extends JFrame implements ActionListener {
     private JComboBox<String> comboTaille;
     private JButton boutonOK;
     private String[] themes = {"IAI", "Formes", "Autre"};
-    private String[] taille = {"IAI", "Formes", "Autre"};
+    private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
 
 
-    public Fenetre(){
+    public FenetreParametres(){
         this.setTitle("Memory");
         this.setResizable(true);
-        this.setSize(1000, 1000);
+        this.setSize(500, 500);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         build();
