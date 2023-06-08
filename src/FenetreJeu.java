@@ -29,15 +29,15 @@ public class FenetreJeu extends JFrame implements ActionListener {
         panelPrincipal.setLayout(new BorderLayout());
 
         panelScore = new JPanel();
-        panelScore.setLayout(new GridLayout(2, 2, 100, 30));
+        panelScore.setLayout(new FlowLayout());
 
         panelCartes = new JPanel();
         panelCartes.setLayout(new GridLayout(longueur, largeur, 10, 10));
 
         labelJ1 = new JLabel("Joueur 1 ");
         labelJ2 = new JLabel("Joueur 2 ");
-        scoreJ1 = new JLabel("1");
-        scoreJ2 = new JLabel("2");
+        scoreJ1 = new JLabel("Score :1");
+        scoreJ2 = new JLabel("Score :2");
 
         int nbCartes = longueur*largeur;
 
@@ -50,8 +50,8 @@ public class FenetreJeu extends JFrame implements ActionListener {
 
 
         panelScore.add(labelJ1);
-        panelScore.add(labelJ2);
         panelScore.add(scoreJ1);
+        panelScore.add(labelJ2);
         panelScore.add(scoreJ2);
 
         panelPrincipal.add(panelScore, BorderLayout.NORTH);
