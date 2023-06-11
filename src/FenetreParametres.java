@@ -16,7 +16,7 @@ public class FenetreParametres extends JFrame implements ActionListener {
     private JComboBox<String> comboTheme;
     private JComboBox<String> comboTaille;
     private JButton boutonOK;
-    private String[] themes = {"IAI", "Formes", "Autre"};
+    private String[] themes = {"flags", "IAI", "Formes", "Autre"};
     private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
 
     private boolean playBtnPressed = false;
@@ -79,6 +79,10 @@ public class FenetreParametres extends JFrame implements ActionListener {
 
     public String getPlayer2Name(){
         return pseudoJ2.getText();
+    }
+
+    public String getComboTheme(){
+        return comboTheme.getSelectedItem().toString();
     }
 
     public boolean oui(){

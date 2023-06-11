@@ -7,24 +7,36 @@ public class Player{
     private int score;
     private Card[] cardsDrown;
 
+    private enum StatePlayer{
+        statePlaying,
+        stateWaiting,
+        stateOneCardDrown,
+        stateTwoCardsDrown,
+    }
+
     private StatePlayer state;
-
-    private StatePlayer statePlaying = new StatePlayerPlaying();
-    private StatePlayer stateWaiting = new StatePlayerWaiting();
-    private StatePlayer stateOneCardDrown = new StatePlayerOneCardDrown();
-    private StatePlayer stateTwoCardsDrown = new StatePlayerTwoCardsDrown();
-
 
     public Player(String n, int r){
         name = n;
         score = 0;
         cardsDrown = new Card[2];
         rank = r;
-        state = (rank % 2 == 0) ? stateWaiting : statePlaying;
+        state = (rank % 2 == 0) ? StatePlayer.stateWaiting : StatePlayer.statePlaying;
     }
 
     public int isPlayerPlaying(){
-        return (state != stateWaiting) ? rank : 0;
+        return (state != StatePlayer.stateWaiting) ? rank : 0;
+    }
+
+    public boolean hasPlayerTwoCards(){
+        return state == StatePlayer.stateTwoCardsDrown;
+    }
+
+    public void playerState(){
+        if(state == StatePlayer.statePlaying) System.out.println(name + " PLAYING");
+        if(state == StatePlayer.stateWaiting) System.out.println(name + " WAITING");
+        if(state == StatePlayer.stateOneCardDrown) System.out.println(name + " ONECARD");
+        if(state == StatePlayer.stateTwoCardsDrown) System.out.println(name + " TWOCARDS");
     }
 
     public StatePlayer GetState(){
@@ -32,7 +44,7 @@ public class Player{
     }
 
     public void SwitchRole(){
-        state = (state == stateWaiting) ? statePlaying : stateWaiting;
+        state = (state == StatePlayer.stateWaiting) ? StatePlayer.statePlaying : StatePlayer.stateWaiting;
     }
 
     public Card[] GetCards(){
@@ -49,7 +61,7 @@ public class Player{
 
     public void Gain(int pts){
         score += pts;
-        state = statePlaying;
+        state = StatePlayer.statePlaying;
     }
 
     public boolean IsWinning(){
@@ -59,19 +71,16 @@ public class Player{
     public void PickCard(Card c){
         if(cardsDrown[0] == null){
             cardsDrown[0] = c;
-            state = stateOneCardDrown;
-            System.out.println("2 CARDS");
+            state = StatePlayer.stateOneCardDrown;
         }
         else if(cardsDrown[1] == null){
             cardsDrown[1] = c;
-            state = stateTwoCardsDrown;
-            System.out.println("1 CARD");
+            state = StatePlayer.stateTwoCardsDrown;
         }
         if(c == null){
             cardsDrown[0] = null;
             cardsDrown[1] = null;
-            state = statePlaying;
-            System.out.println("PLAY");
+            state = StatePlayer.statePlaying;
         }
     }
 }

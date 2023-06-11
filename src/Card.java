@@ -13,23 +13,27 @@ import java.awt.event.ActionListener;
     private String backSide;
     private String frontSide;
 
+    private int indexOfCard;
+
     private JButton btn;
 
     private Icon backImg;
     private Icon frontImg;
 
-    private StateCard stateDown = new StateCardDown();
-    private StateCard stateUp = new StateCardUp();
-    private StateCard stateOut = new StateCardOut();
+    private enum StateCard{
+        stateDown,
+        stateUp,
+        stateOut
+    }
 
-    private StateCard state = stateDown;
+    private StateCard state = StateCard.stateDown;
 
-    public Card(ActionListener al, String backSide, String frontSide){
+    public Card(ActionListener al, String backSide, String frontSide, int idx){
         this.backSide = backSide;
         this.frontSide = frontSide;
         backImg = new ImageIcon(backSide);
         frontImg = new ImageIcon(frontSide);
-
+        indexOfCard = idx;
         btn = new JButton(backImg);
         btn.addActionListener(al);
         btn.addActionListener(this);
@@ -41,69 +45,55 @@ import java.awt.event.ActionListener;
     }
 
     public void ShowCard(){
-        if(state == stateDown){
+        if(state == StateCard.stateDown){
             btn.setIcon(backImg);
         }
-        else if(state == stateUp){
+        else if(state == StateCard.stateUp){
             btn.setIcon(frontImg);
         }
-        else if(state == stateOut){
+        else if(state == StateCard.stateOut){
             btn.setVisible(false);;
         }
     }
 
     public boolean IsDrawn(){
-        return state == stateUp;
+        return state == StateCard.stateUp;
     }
 
-    public String GetFront(){
-        return frontSide;
+    public int GetFront(){
+        return indexOfCard;
     }
 
     public void RemoveCard(){
-        state = stateOut;
+        state = StateCard.stateOut;
         btn.setVisible(false);
     }
 
     public void HideCard(){
-        state = stateDown;
+        state = StateCard.stateDown;
         btn.setIcon(backImg);
         btn.setPreferredSize(new Dimension(backImg.getIconWidth(), backImg.getIconHeight()));
     }
 
     public void DrawCard(){
-        state = stateUp;
+        state = StateCard.stateUp;
         btn.setIcon(frontImg);
         btn.setPreferredSize(new Dimension(frontImg.getIconWidth(), frontImg.getIconHeight()));
     }
 
     public void PlayerSelect(Card otherCard){
 
-        if(state == stateDown){
-            state = stateUp;
+        if(state == StateCard.stateDown){
+            state = StateCard.stateUp;
         }
-        else if(state == stateUp){
+        else if(state == StateCard.stateUp){
             System.out.println("Card already used");
         }
-        else if(state == stateOut){
+        else if(state == StateCard.stateOut){
             System.out.println("Card is out");
         }
     }
 
-
-
-    public void Update(Card otherCard){
-        if(state == stateUp){
-            if(otherCard!=null){
-                if(otherCard.GetFront() == this.frontSide){
-                    RemoveCard();
-                }
-                else{
-                    HideCard();
-                }
-            }
-        }
-    }
 
     public void actionPerformed(ActionEvent e){
 

@@ -32,7 +32,7 @@ public class FenetreController implements ActionListener {
     public void actionPerformed(ActionEvent e){
         if (e.getSource() == fp.getBtnPlay()){
             fp.setVisible(false);
-            fj = new FenetreJeu(fp.getCoordinates()[0], fp.getCoordinates()[1], fp.getPlayer1Name(), fp.getPlayer2Name());
+            fj = new FenetreJeu(fp.getCoordinates()[0], fp.getCoordinates()[1], fp.getComboTheme(), fp.getPlayer1Name(), fp.getPlayer2Name());
             fj.setVisible(true);
         }
     }
