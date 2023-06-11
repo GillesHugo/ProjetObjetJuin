@@ -50,10 +50,8 @@ public class Terminal {
     }
 
     private void Dialoguer(){
-
-        
+                
         DisplayGame();
-
 
         int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying();
 

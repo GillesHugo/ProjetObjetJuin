@@ -1,8 +1,22 @@
 
 import java.util.concurrent.*;
- public class Card{
-    private char backSide = '*';
-    private char frontSide;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+ public class Card implements ActionListener{
+    private String backSide;
+    private String frontSide;
+
+    private JButton btn;
+
+    private Icon backImg;
+    private Icon frontImg;
 
     private StateCard stateDown = new StateCardDown();
     private StateCard stateUp = new StateCardUp();
@@ -10,19 +24,31 @@ import java.util.concurrent.*;
 
     private StateCard state = stateDown;
 
-    public Card(char frontSide){
+    public Card(ActionListener al, String backSide, String frontSide){
+        this.backSide = backSide;
         this.frontSide = frontSide;
+        backImg = new ImageIcon(backSide);
+        frontImg = new ImageIcon(frontSide);
+
+        btn = new JButton(backImg);
+        btn.addActionListener(al);
+        btn.addActionListener(this);
+
+    }
+
+    public JButton getButton(){
+        return btn;
     }
 
     public void ShowCard(){
         if(state == stateDown){
-            state.ShowCard(backSide);
+            btn.setIcon(backImg);
         }
         else if(state == stateUp){
-            state.ShowCard(frontSide);
+            btn.setIcon(frontImg);
         }
         else if(state == stateOut){
-            state.ShowCard(' ');
+            btn.setVisible(false);;
         }
     }
 
@@ -30,16 +56,25 @@ import java.util.concurrent.*;
         return state == stateUp;
     }
 
-    public char getFront(){
+    public String GetFront(){
         return frontSide;
     }
 
     public void RemoveCard(){
         state = stateOut;
+        btn.setVisible(false);
     }
 
     public void HideCard(){
         state = stateDown;
+        btn.setIcon(backImg);
+        btn.setPreferredSize(new Dimension(backImg.getIconWidth(), backImg.getIconHeight()));
+    }
+
+    public void DrawCard(){
+        state = stateUp;
+        btn.setIcon(frontImg);
+        btn.setPreferredSize(new Dimension(frontImg.getIconWidth(), frontImg.getIconHeight()));
     }
 
     public void PlayerSelect(Card otherCard){
@@ -55,14 +90,12 @@ import java.util.concurrent.*;
         }
     }
 
-    public void DrawCard(){
-        state = stateUp;
-    }
+
 
     public void Update(Card otherCard){
         if(state == stateUp){
             if(otherCard!=null){
-                if(otherCard.getFront() == this.frontSide){
+                if(otherCard.GetFront() == this.frontSide){
                     RemoveCard();
                 }
                 else{
@@ -70,5 +103,9 @@ import java.util.concurrent.*;
                 }
             }
         }
+    }
+
+    public void actionPerformed(ActionEvent e){
+
     }
  }

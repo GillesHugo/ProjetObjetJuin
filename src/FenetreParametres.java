@@ -19,16 +19,17 @@ public class FenetreParametres extends JFrame implements ActionListener {
     private String[] themes = {"IAI", "Formes", "Autre"};
     private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
 
+    private boolean playBtnPressed = false;
 
-    public FenetreParametres(){
+    public FenetreParametres(ActionListener listener){
         this.setTitle("Memory");
         this.setResizable(true);
         this.setSize(500, 500);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        build();
+        build(listener);
     }
-    private void build(){
+    private void build(ActionListener listener){
         panelParametrage = new JPanel();
         panelParametrage.setLayout(new GridLayout(5,2,100,30));
 
@@ -53,10 +54,40 @@ public class FenetreParametres extends JFrame implements ActionListener {
         panelParametrage.add(labelTaille);
         panelParametrage.add(comboTaille);
         panelParametrage.add(boutonOK);
+		boutonOK.addActionListener(listener);
 
         this.setContentPane(panelParametrage);
     }
-    public void actionPerformed(ActionEvent e){
 
+    public int[] getCoordinates(){
+        if(comboTaille.getSelectedItem() == taille[0]) return new int[]{4, 3};
+        if(comboTaille.getSelectedItem() == taille[1]) return new int[]{4, 4};
+        if(comboTaille.getSelectedItem() == taille[2]) return new int[]{5, 4};
+        if(comboTaille.getSelectedItem() == taille[3]) return new int[]{6, 5};
+        if(comboTaille.getSelectedItem() == taille[4]) return new int[]{6, 6};
+        if(comboTaille.getSelectedItem() == taille[5]) return new int[]{7, 6};
+        return new int[]{4, 3};
+    }
+    
+    public JButton getBtnPlay(){
+        return boutonOK;
+    }
+
+    public String getPlayer1Name(){
+        return pseudoJ1.getText();
+    }
+
+    public String getPlayer2Name(){
+        return pseudoJ2.getText();
+    }
+
+    public boolean oui(){
+        return playBtnPressed;
+    }
+
+    public void actionPerformed(ActionEvent e){
+        if (e.getSource() == boutonOK){
+            playBtnPressed = true;
+        }
     }
 }

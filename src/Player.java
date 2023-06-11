@@ -52,19 +52,26 @@ public class Player{
         state = statePlaying;
     }
 
+    public boolean IsWinning(){
+        return cardsDrown[0].GetFront() == cardsDrown[1].GetFront();
+    }
+
     public void PickCard(Card c){
         if(cardsDrown[0] == null){
             cardsDrown[0] = c;
             state = stateOneCardDrown;
+            System.out.println("2 CARDS");
         }
         else if(cardsDrown[1] == null){
             cardsDrown[1] = c;
             state = stateTwoCardsDrown;
+            System.out.println("1 CARD");
         }
-        else{
+        if(c == null){
             cardsDrown[0] = null;
             cardsDrown[1] = null;
             state = statePlaying;
+            System.out.println("PLAY");
         }
     }
 }
