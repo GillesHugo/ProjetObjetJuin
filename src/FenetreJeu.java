@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.*;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +31,7 @@ public class FenetreJeu extends JFrame implements ActionListener {
     private int height;
 
     private String theme;
+    private Timer timer;
 
     public FenetreJeu(int w, int h, String theme, String p1, String p2){
         this.setResizable(true);
@@ -67,6 +69,10 @@ public class FenetreJeu extends JFrame implements ActionListener {
 
         this.theme = theme;
 
+        timer = new Timer(10, event -> {SecondPause();});
+
+        timer.setRepeats(false);
+
         SetGame();
 
         panelScore.add(labelJ1);
@@ -83,7 +89,7 @@ public class FenetreJeu extends JFrame implements ActionListener {
     private void SetGame(){
         int size = width*height;
         Random random = new Random();
-        String folderPath = "../img/" + theme;
+        String folderPath = "img/" + theme;
 
         File folder = new File(folderPath);
         ArrayList<String> fileNames = new ArrayList<>();
@@ -115,7 +121,7 @@ public class FenetreJeu extends JFrame implements ActionListener {
                 if(cards[x][y] == null){
                     cardSet = true;
                     System.out.println(fileNames.get(idxImg));
-                    cards[x][y] = new Card(this, "../img/0.jpg", fileNames.get(idxImg), idxImg);
+                    cards[x][y] = new Card(this, "img/0.jpg", fileNames.get(idxImg), idxImg);
                     panelCartes.add(cards[x][y].getButton());
                     numberOfIdxImg++;
                     if(numberOfIdxImg == 2){
@@ -135,13 +141,20 @@ public class FenetreJeu extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying() - 1;
+        this.setTitle("C'est à " + players[rPP].GetName() + " de jouer!");
         players[rPP].playerState();
         Draw(e, rPP);
         System.out.print("draw and ");
         players[rPP].playerState();
         if(players[rPP].hasPlayerTwoCards()) {
+            timer.start();
             //SecondPause();
-            Card[] cardsDrown = players[rPP].GetCards();
+        }    
+    }
+
+    public void SecondPause(){
+        int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying() - 1;
+        Card[] cardsDrown = players[rPP].GetCards();
             System.out.println(cardsDrown[0].GetFront() + " + " + cardsDrown[1].GetFront());
             if(cardsDrown[0].GetFront() == cardsDrown[1].GetFront()){
                 cardsDrown[0].RemoveCard();
@@ -160,26 +173,26 @@ public class FenetreJeu extends JFrame implements ActionListener {
                 System.out.print("lose and ");
                 players[rPP].playerState();
             }
-        }
-    }
-
-    public void SecondPause(){
+            scoreJ1.setText(""+players[0].GetScore());
+            scoreJ2.setText(""+players[1].GetScore());
+        System.out.println("TIMERs");
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+        rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying() - 1;
+        this.setTitle("C'est à " + players[rPP].GetName() + " de jouer!");
     }
 
     public void Draw(ActionEvent e, int rPP){
          for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
-                if(e.getSource() == cards[i][j].getButton()){
+                if(e.getSource() == cards[i][j].getButton() && !cards[i][j].IsDrawn()){
                     cards[i][j].DrawCard();
                     players[rPP].PickCard(cards[i][j]);
                 }
             }
          }
-         SecondPause();
     }
 }
