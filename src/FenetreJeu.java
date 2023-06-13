@@ -30,6 +30,8 @@ public class FenetreJeu extends JFrame implements ActionListener {
     private int width;
     private int height;
 
+    private int nbOfCards;
+
     private String theme;
     private Timer timer;
 
@@ -50,6 +52,8 @@ public class FenetreJeu extends JFrame implements ActionListener {
 
         width = w;
         height = h;
+
+        nbOfCards = w*h;
 
         panelCartes = new JPanel();
         panelCartes.setLayout(new GridLayout(width, height, 10, 10));
@@ -107,7 +111,6 @@ public class FenetreJeu extends JFrame implements ActionListener {
         cards = new Card[width][height];
         int idxImg = random.nextInt(fileNames.size());
         int numberOfIdxImg = 0;
-        double presentedImgs = Math.pow(2, idxImg+1);
         int x = random.nextInt(width);
         int y = random.nextInt(height);
         int it = 0;
@@ -175,7 +178,16 @@ public class FenetreJeu extends JFrame implements ActionListener {
             }
             scoreJ1.setText(""+players[0].GetScore());
             scoreJ2.setText(""+players[1].GetScore());
-        System.out.println("TIMERs");
+
+            if((players[0].GetScore() + players[1].GetScore()) == nbOfCards){
+                int winner = (players[0].GetScore() > players[1].GetScore()) ? 0 : 1;
+                if(players[0].GetScore() == players[1].GetScore()){
+                    JOptionPane.showMessageDialog(null, "Egalité! Personne ne gagne", "Fin du jeu!", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, players[winner].GetName() + " a gagné", "Fin du jeu!", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException ex) {
