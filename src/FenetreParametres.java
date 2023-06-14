@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FenetreParametres extends JFrame implements ActionListener {
+public class FenetreParametres extends JFrame {
     private JPanel panelParametrage;
     private JLabel labelJ1;
     private JLabel labelJ2;
@@ -17,8 +17,6 @@ public class FenetreParametres extends JFrame implements ActionListener {
     private JButton boutonOK;
     private String[] themes = {"flags", "IAI", "mahjong"};
     private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
-
-    private boolean playBtnPressed = false;
 
     public FenetreParametres(ActionListener listener){
         this.setTitle("Memory");
@@ -82,15 +80,5 @@ public class FenetreParametres extends JFrame implements ActionListener {
 
     public String getComboTheme(){
       return comboTheme.getSelectedItem().toString();
-    }
-
-    public boolean oui(){
-        return playBtnPressed;
-    }
-
-    public void actionPerformed(ActionEvent e){
-        if (e.getSource() == boutonOK){
-            playBtnPressed = true;
-        }
     }
 }
