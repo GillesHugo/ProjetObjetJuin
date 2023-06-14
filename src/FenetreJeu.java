@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.util.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
-import java.lang.Math;
 
 public class FenetreJeu extends JFrame implements ActionListener {
 
@@ -23,13 +21,11 @@ public class FenetreJeu extends JFrame implements ActionListener {
     private JLabel scoreJ1;
     private JLabel scoreJ2;
 
-    //private List<Card> cards;
     private Card cards[][];
     private Player[] players;
 
     private int width;
     private int height;
-
     private int nbOfCards;
 
     private String theme;
@@ -58,13 +54,11 @@ public class FenetreJeu extends JFrame implements ActionListener {
         panelCartes = new JPanel();
         panelCartes.setLayout(new GridLayout(width, height, 10, 10));
 
-        //cards = new ArrayList<Card>();
         players = new Player[2];
         players[0] = new Player(p1, 1);
         players[1] = new Player(p2, 2);
 
         this.setTitle("C'est à " + players[0].GetName() + " de jouer!");
-        players[0].playerState();
 
         labelJ1 = new JLabel(players[0].GetName());
         labelJ2 = new JLabel(players[1].GetName());
@@ -90,11 +84,7 @@ public class FenetreJeu extends JFrame implements ActionListener {
         this.setContentPane(panelPrincipal);
     }
 
-    private void SetGame(){
-        int size = width*height;
-        Random random = new Random();
-        String folderPath = "img/" + theme;
-
+    private ArrayList<String> LoadCards(String folderPath){
         File folder = new File(folderPath);
         ArrayList<String> fileNames = new ArrayList<>();
         if (folder.exists() && folder.isDirectory()) {
@@ -107,23 +97,27 @@ public class FenetreJeu extends JFrame implements ActionListener {
                 }
             }
         }
+        return fileNames;
+    }
 
+    private void SetGame(){
+        int size = width*height;
+        Random random = new Random();
+        String folderPath = "img/" + theme;
+        ArrayList<String> fileNames = LoadCards(folderPath);
         cards = new Card[width][height];
         int idxImg = random.nextInt(fileNames.size());
         int numberOfIdxImg = 0;
         int x = random.nextInt(width);
         int y = random.nextInt(height);
-        int it = 0;
         boolean cardSet = false;
         for(int i = 0; i < size; i++){
             cardSet = false;
             do{
-                it++;
                 x = random.nextInt(width);
                 y = random.nextInt(height);
                 if(cards[x][y] == null){
                     cardSet = true;
-                    System.out.println(fileNames.get(idxImg));
                     cards[x][y] = new Card(this, "img/0.jpg", fileNames.get(idxImg), idxImg);
                     panelCartes.add(cards[x][y].getButton());
                     numberOfIdxImg++;
@@ -134,7 +128,6 @@ public class FenetreJeu extends JFrame implements ActionListener {
                 }
             }while(cardSet == false);
         }
-        System.out.println(it);
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 panelCartes.add(cards[i][j].getButton());
@@ -145,27 +138,20 @@ public class FenetreJeu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying() - 1;
         this.setTitle("C'est à " + players[rPP].GetName() + " de jouer!");
-        players[rPP].playerState();
         Draw(e, rPP);
-        System.out.print("draw and ");
-        players[rPP].playerState();
         if(players[rPP].hasPlayerTwoCards()) {
             timer.start();
-            //SecondPause();
         }    
     }
 
     public void SecondPause(){
         int rPP = players[0].isPlayerPlaying() + players[1].isPlayerPlaying() - 1;
         Card[] cardsDrown = players[rPP].GetCards();
-            System.out.println(cardsDrown[0].GetFront() + " + " + cardsDrown[1].GetFront());
             if(cardsDrown[0].GetFront() == cardsDrown[1].GetFront()){
                 cardsDrown[0].RemoveCard();
                 cardsDrown[1].RemoveCard();
                 players[rPP].PickCard(null);
                 players[rPP].Gain(2);
-                System.out.print("win and ");
-                players[rPP].playerState();
             }
             else{
                 cardsDrown[0].HideCard();
@@ -173,8 +159,6 @@ public class FenetreJeu extends JFrame implements ActionListener {
                 players[rPP].PickCard(null);
                 players[0].SwitchRole();
                 players[1].SwitchRole();
-                System.out.print("lose and ");
-                players[rPP].playerState();
             }
             scoreJ1.setText(""+players[0].GetScore());
             scoreJ2.setText(""+players[1].GetScore());

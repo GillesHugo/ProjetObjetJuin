@@ -1,5 +1,4 @@
 
-import java.util.concurrent.*;
 
 public class Player{
     private String name;
@@ -30,13 +29,6 @@ public class Player{
 
     public boolean hasPlayerTwoCards(){
         return state == StatePlayer.stateTwoCardsDrown;
-    }
-
-    public void playerState(){
-        if(state == StatePlayer.statePlaying) System.out.println(name + " PLAYING");
-        if(state == StatePlayer.stateWaiting) System.out.println(name + " WAITING");
-        if(state == StatePlayer.stateOneCardDrown) System.out.println(name + " ONECARD");
-        if(state == StatePlayer.stateTwoCardsDrown) System.out.println(name + " TWOCARDS");
     }
 
     public StatePlayer GetState(){

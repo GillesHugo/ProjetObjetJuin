@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 public class FenetreParametres extends JFrame implements ActionListener {
     private JPanel panelParametrage;
-    private JPanel panelJeu;
     private JLabel labelJ1;
     private JLabel labelJ2;
     private JLabel labelTheme;
@@ -82,7 +81,7 @@ public class FenetreParametres extends JFrame implements ActionListener {
     }
 
     public String getComboTheme(){
-        return comboTheme.getSelectedItem().toString();
+      return comboTheme.getSelectedItem().toString();
     }
 
     public boolean oui(){
