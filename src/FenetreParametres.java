@@ -15,7 +15,7 @@ public class FenetreParametres extends JFrame {
     private JComboBox<String> comboTheme;
     private JComboBox<String> comboTaille;
     private JButton boutonOK;
-    private String[] themes = {"flags", "IAI", "mahjong"};
+    private String[] themes = {"flags", "IAI", "mahjong", "cats"};
     private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
 
     public FenetreParametres(ActionListener listener){
