@@ -28,7 +28,7 @@ public class FenetreController implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e){
-        if (e.getSource() == fp.getBtnPlay()){
+        if (e.getSource() == fp.getBtnPlay()){ //The user press the button in order to play, the options window slips away & the game window occurs
             fp.setVisible(false);
             fj = new FenetreJeu(fp.getCoordinates()[0], fp.getCoordinates()[1], fp.getComboTheme(), fp.getPlayer1Name(), fp.getPlayer2Name());
             fj.setVisible(true);

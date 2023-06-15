@@ -1,7 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 
 public class FenetreParametres extends JFrame {
     private JPanel panelParametrage;
@@ -15,8 +19,8 @@ public class FenetreParametres extends JFrame {
     private JComboBox<String> comboTheme;
     private JComboBox<String> comboTaille;
     private JButton boutonOK;
-    private String[] themes = {"flags", "IAI", "mahjong", "cats"};
-    private String[] taille = {"4x3", "4x4", "5x4", "6x5", "6x6", "7x6"};
+    private String[] themes;
+    private String[] taille;
 
     public FenetreParametres(ActionListener listener){
         this.setTitle("Memory");
@@ -27,8 +31,12 @@ public class FenetreParametres extends JFrame {
         build(listener);
     }
     private void build(ActionListener listener){
+        String [][] elements = parseConfigFile("conf/config.ini");
         panelParametrage = new JPanel();
         panelParametrage.setLayout(new GridLayout(5,2,100,30));
+
+        themes = elements[0];
+        taille = elements[1];
 
         labelJ1 = new JLabel("Pseudo Joueur 1 : ");
         labelJ2 = new JLabel("Pseudo Joueur 2 : ");
@@ -57,13 +65,8 @@ public class FenetreParametres extends JFrame {
     }
 
     public int[] getCoordinates(){
-        if(comboTaille.getSelectedItem() == taille[0]) return new int[]{4, 3};
-        if(comboTaille.getSelectedItem() == taille[1]) return new int[]{4, 4};
-        if(comboTaille.getSelectedItem() == taille[2]) return new int[]{5, 4};
-        if(comboTaille.getSelectedItem() == taille[3]) return new int[]{6, 5};
-        if(comboTaille.getSelectedItem() == taille[4]) return new int[]{6, 6};
-        if(comboTaille.getSelectedItem() == taille[5]) return new int[]{7, 6};
-        return new int[]{4, 3};
+        String str = (String)comboTaille.getSelectedItem();
+        return new int[]{str.charAt(0) - 48, str.charAt(2) - 48};
     }
     
     public JButton getBtnPlay(){
@@ -80,5 +83,36 @@ public class FenetreParametres extends JFrame {
 
     public String getComboTheme(){
       return comboTheme.getSelectedItem().toString();
+    }
+
+    private String[][] parseConfigFile(String fileName) {
+        String[][] elements = new String[2][];
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            for (int i = 0; i < 2; i++) {
+                if ((line = reader.readLine()) != null) {
+                    String[] lineElements = line.split(";");
+                    elements[i] = new String[lineElements.length - 1];
+                    System.arraycopy(lineElements, 1, elements[i], 0, elements[i].length);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return elements;
     }
 }
